@@ -11,6 +11,29 @@ arbitradores lo usen, lo rompan y lo mejoren.
 > **No es asesoramiento financiero.** Es una herramienta de análisis. Las
 > decisiones y la plata son tuyas.
 
+## ⭐ Tus operaciones se guardan solas en Google Sheets
+
+Lo que todo arbitrador termina necesitando: **dejar de pasar órdenes a mano a la
+planilla.**
+
+Con un comando, o con un clic en el dashboard si dejás corriendo el agente de
+escritorio (`companion/`), el sistema trae **todas tus órdenes P2P completadas** de Binance y Bybit por API de solo lectura y las escribe en tu
+planilla de Google, en la pestaña del mes, ventas de un lado y compras del otro.
+
+- **Sin tipear nada**: fecha, ID de orden, USDT, total en pesos, exchange y medio
+  de pago salen de la orden real.
+- **Con la comisión real** que te cobró el exchange, no una estimada.
+- **Sin duplicar**: cada orden se reconoce por su ID. Podés correrlo las veces que
+  quieras.
+- **No pisa tus fórmulas**: solo completa las columnas de entrada. Comisión, neto
+  y promedio los sigue calculando tu planilla.
+- **También por captura**: para los exchanges sin API, mandás la foto de la
+  operación por Telegram y se carga sola.
+- Todo queda además en una base SQLite local, que alimenta el dashboard, el
+  promedio de compra y venta del día y el control mensual por billetera.
+
+Cómo conectarlo está en [Conectar tu planilla de Google](#conectar-tu-planilla-de-google).
+
 ## Qué hace
 
 - **Precio ejecutable, no el de vidriera.** Camina el libro P2P respetando el
@@ -25,8 +48,8 @@ arbitradores lo usen, lo rompan y lo mejoren.
   porcentaje.
 - **Prima de BTC y altcoins** contra USDT, traducida a tipo de cambio implícito
   para poder compararlas.
-- **Carga de operaciones** por API de solo lectura (Binance, Bybit) o por
-  captura de pantalla, a una base SQLite y, si querés, a una planilla de Google.
+- **Carga automática de operaciones** a tu planilla de Google y a SQLite, por API
+  de solo lectura o por captura. Ver la sección de arriba.
 - **Dashboard web** con jugadas, oportunidades, operaciones, clientes y control
   mensual por billetera.
 - **Bot de Telegram** con comandos, cotizador para clientes y alertas de spread
@@ -49,6 +72,10 @@ exchanges locales salen de CriptoYa.
 **A qué hora conviene operar**: spread mediano por hora y por día, sobre el histórico propio.
 
 ![Historial](docs/img/06-historial.png)
+
+**Progreso hacia Comerciante Verificado de Binance P2P**, medido sobre tus operaciones cargadas.
+
+![Comerciante Verificado](docs/img/07-verificado.png)
 
 <details>
 <summary>Más pantallas</summary>
@@ -98,6 +125,33 @@ públicos. Todo lo demás es opcional y se prende completando el `.env`:
 Tus cuentas para copiar en el chat de cada orden se editan en el bloque
 `ACCOUNTS` de `dashboard.html`. Si ponés datos reales, trabajá sobre una copia
 llamada `dashboard.local.html`, que ya está en `.gitignore`.
+
+## Conectar tu planilla de Google
+
+1. En Google Cloud creá una **service account**, habilitá la API de Google Sheets
+   y bajá su archivo JSON. Guardalo en la carpeta del proyecto como
+   `service-account.json`. Ya está en `.gitignore`.
+2. Abrí tu planilla y **compartila como Editor** con el mail de esa service
+   account.
+3. En `.env` completá `SHEET_ID` con el ID que aparece en la URL de la planilla.
+4. La planilla necesita **una pestaña por mes con el nombre en español**
+   (`Enero`, `Febrero`, …). En cada pestaña la fila 1 son encabezados, la fila 2
+   son totales y los datos arrancan en la fila 3. Las ventas van desde la columna
+   A y las compras desde la columna K, con este orden en cada bloque:
+   `Fecha · ID · USD bruto · Comisión · USD neto · Promedio · Total ARS ·
+   Exchange/Cripto · Banco`. El sistema escribe todas menos Comisión, USD neto y
+   Promedio, que son tus fórmulas.
+5. Cargá las API keys **de solo lectura** de Binance o Bybit en `.env`.
+
+Para traer tus órdenes:
+
+```bash
+python -m cli.sync_binance --today    # muestra qué hay nuevo y pide confirmación
+python -m cli.sync_bybit
+```
+
+Si falta la pestaña del mes, el sistema te avisa cuál crear y no escribe nada a
+medias. Sin planilla configurada todo funciona igual y se guarda solo en SQLite.
 
 ## Comandos útiles
 
