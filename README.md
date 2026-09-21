@@ -36,6 +36,37 @@ arbitradores lo usen, lo rompan y lo mejoren.
 Fetchers P2P públicos incluidos: Binance, OKX, Bybit, Bitget y KuCoin. Los
 exchanges locales salen de CriptoYa.
 
+## Cómo se ve
+
+**Jugadas**: la mejor jugada ahora, neta de comisiones, con la curva por tamaño de ticket.
+
+![Jugadas](docs/img/01-jugadas.png)
+
+**Oportunidades**: dónde comprar más barato y dónde vender más caro, con los avisos P2P en vivo.
+
+![Oportunidades](docs/img/02-oportunidades.png)
+
+**A qué hora conviene operar**: spread mediano por hora y por día, sobre el histórico propio.
+
+![Historial](docs/img/06-historial.png)
+
+<details>
+<summary>Más pantallas</summary>
+
+**Calculadora P2P**
+
+![Calculadora P2P](docs/img/03-calc-p2p.png)
+
+**¿A qué precio publico?**
+
+![A qué precio publico](docs/img/04-a-que-precio.png)
+
+**Análisis técnico del dólar cripto**
+
+![Dólar TA](docs/img/05-dolar-ta.png)
+
+</details>
+
 ## Arrancar en 5 minutos
 
 Necesitás Python 3.11 o superior.

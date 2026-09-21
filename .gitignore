@@ -48,5 +48,7 @@ data/spread_alert_state.json
 
 # Capturas del panel: llevan nombres de clientes y montos reales (PII)
 *.png
+# ...salvo las del README, que ya están revisadas y sin datos personales
+!docs/img/*.png
 data/trades.db.bak-*
 data/capturas-fallidas/
