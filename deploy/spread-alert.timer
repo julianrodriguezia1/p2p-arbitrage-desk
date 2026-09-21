@@ -1,0 +1,9 @@
+[Unit]
+Description=Corre la alerta de spread cada 15 min
+
+[Timer]
+OnCalendar=*:0/15
+Persistent=true
+
+[Install]
+WantedBy=timers.target

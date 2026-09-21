@@ -1,0 +1,8 @@
+[Unit]
+Description=Arbitrador - logger de la prima cripto/ARS a CSV (oneshot)
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/arbitrador
+ExecStart=/opt/arbitrador/.venv/bin/python -m cli.prima_logger --once --csv /opt/arbitrador/data/prima_log.csv --venues binance kucoin bybit okx --assets BTC ETH USDT

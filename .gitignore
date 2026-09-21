@@ -1,0 +1,52 @@
+# Secretos — NUNCA commitear
+.env
+*.env
+
+# Base de datos local (log AFIP)
+*.db
+*.sqlite
+*.sqlite3
+
+# Tu copia del dashboard con TUS cuentas reales (CBU/CVU/alias): copiá
+# dashboard.html a dashboard.local.html, editá ahí y nunca lo subas.
+dashboard.local.html
+# Planilla de seguimiento de prospección: nombres y notas de contactos reales
+templates/seguimiento_prospeccion.md
+
+# Backups locales
+*.bak
+
+# Credenciales Google
+*service-account*.json
+*credentials*.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Tooling local: los settings tienen permisos y rutas absolutas de la máquina.
+# Los SKILLS sí van al repo: viajan a la notebook y al VPS con git pull.
+.claude/*
+!.claude/skills/
+.claude/worktrees/
+.playwright-mcp/
+
+# Logs locales (server uvicorn, etc.)
+*.log
+
+# Instalador del agente (Fase B2) — binario y config embebida con secrets
+dist/
+build/
+*.spec
+*.exe
+companion/_frozen_config.py
+
+# Estado de alertas en el VPS (creado en runtime, no versionado)
+data/spread_alert_state.json
+
+# Capturas del panel: llevan nombres de clientes y montos reales (PII)
+*.png
+data/trades.db.bak-*
+data/capturas-fallidas/

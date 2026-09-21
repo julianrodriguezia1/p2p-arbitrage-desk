@@ -1,0 +1,55 @@
+name: spread-logger
+
+# Muestrea el spread USDT/ARS y commitea el dato al CSV. Corre en la nube,
+# sin depender de la máquina del usuario. La hora se guarda en ART dentro del
+# script (no depende del timezone del runner, que es UTC).
+
+on:
+  schedule:
+    # Cada 30 min a :13 y :43 (minutos off-peak: GitHub throttlea menos que en
+    # :00/:30, que usa todo el mundo). ~1440 min/mes, dentro del free tier (2000).
+    # OJO: el cron de GitHub Actions es UTC y puede demorarse bajo carga; el
+    # timestamp real lo pone el script (ART), así que no afecta el análisis.
+    - cron: "13,43 * * * *"
+  workflow_dispatch: {}  # permite dispararlo a mano desde la pestaña Actions
+
+# Evita que dos corridas pisen el push a la vez.
+concurrency:
+  group: spread-logger
+  cancel-in-progress: false
+
+permissions:
+  contents: write  # para commitear el CSV de vuelta al repo
+
+jobs:
+  sample:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias mínimas
+        run: pip install requests python-dotenv
+
+      - name: Tomar una muestra de spread
+        run: python -m cli.spread_logger --once
+
+      - name: Commitear el dato nuevo
+        run: |
+          git config user.name  "spread-logger[bot]"
+          git config user.email "actions@github.com"
+          # `git add` primero: así detecta tanto archivo nuevo (1ª corrida) como cambios.
+          git add data/spread_log_usdt_ars.csv
+          if git diff --cached --quiet; then
+            echo "Sin fila nueva (CriptoYa no respondió). Nada para commitear."
+            exit 0
+          fi
+          git commit -m "data(spread): muestra USDT/ARS [skip ci]"
+          # Reintenta con rebase por si otra corrida pusheó en el medio.
+          for i in 1 2 3; do
+            git pull --rebase --autostash && git push && break
+            echo "push falló (intento $i), reintento..."; sleep 5
+          done

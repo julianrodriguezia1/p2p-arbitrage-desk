@@ -1,0 +1,16 @@
+[Unit]
+Description=Arbitrador - bot de Telegram (comandos)
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/arbitrador
+# El lector de capturas usa Claude (Agent SDK) y necesita el token del login.
+# Opcional (-): si falta, extract_fields cae al modelo de visión de NVIDIA.
+EnvironmentFile=-/etc/claude-telegram.env
+ExecStart=/opt/arbitrador/.venv/bin/python -m bot.telegram_bot
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

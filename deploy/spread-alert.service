@@ -1,0 +1,8 @@
+[Unit]
+Description=Arbitrador - alerta de spread a Telegram (oneshot)
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/arbitrador
+ExecStart=/opt/arbitrador/.venv/bin/python -m cli.spread_alert --once

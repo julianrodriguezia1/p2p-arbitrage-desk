@@ -1,0 +1,9 @@
+[Unit]
+Description=Muestrea la prima cripto/ARS cada 15 min
+
+[Timer]
+OnCalendar=*:0/15
+Persistent=true
+
+[Install]
+WantedBy=timers.target
