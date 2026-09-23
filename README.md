@@ -99,8 +99,8 @@ exchanges locales salen de CriptoYa.
 Necesitás Python 3.11 o superior.
 
 ```bash
-git clone <URL-de-este-repo>
-cd <carpeta-del-repo>
+git clone https://github.com/julianrodriguezia1/p2p-arbitrage-desk.git
+cd p2p-arbitrage-desk
 python -m venv .venv
 # Windows: .venv\Scripts\activate      Linux/Mac: source .venv/bin/activate
 pip install -r requirements.txt
